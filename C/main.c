@@ -1,3 +1,4 @@
+#include "EasyPIO.h"
 #include <stdio.h>
 #include <conio.h>
 #define port_out 0x208
@@ -8,6 +9,19 @@ void delay (int);
 //
 void main (void)
 {
+   const unsigned char led[] = {14, 15, 18, 23, 24, 25, 8, 7};
+const unsigned char sw[] = {12, 16, 20, 21};
+
+   pioInit();
+   //Set GPIO 21 as outputs
+   pinMode(21, OUTPUT);
+   int i;
+   for (i=1; i<=10; i++) {
+     digitalWrite(21,1);
+     delayMillis(500);
+     digitalWrite(21,0);
+     delayMillis(500);
+  }
 int option;
 int ctr;
 for (int i = 0; i < 3; i++)
@@ -77,4 +91,88 @@ int password(){
       printf("Contrasena incorrecta.\n");
       return 0;
    }
+}
+
+void auto_fantastico() {
+    unsigned char output;
+    int tiempo = 2000; // Tiempo inicial
+
+    printf("Estas viendo el Auto Fantastico!\n");
+    printf("Presione la tecla 'a' si quiere salir!\n");
+    printf("Presione la tecla 'u' para aumentar la velocidad!\n");
+    printf("Presione la tecla 'd' para disminuir la velocidad!\n");
+
+    do {
+        output = 0x80; 
+        for (int t = 0; t < 8; t++) {
+            if (_kbhit()) {
+                char ch = _getch();
+                if (ch == 'a') {
+                    printf("Salida detectada\n");
+                    return; 
+                }
+                if (ch == 'u') {
+                    if (tiempo > 500) tiempo -= 500; // Aumenta la velocidad (disminuye el tiempo)
+                }
+                if (ch == 'd') {
+                    tiempo += 500; // Disminuye la velocidad (aumenta el tiempo)
+                }
+            }
+
+            disp_binary(output, 1);
+            delay(tiempo); 
+            output = output >> 1; // Desplaza a la derecha
+        }
+
+        output = 0x01; 
+        for (int t = 0; t < 6; t++) {
+            if (_kbhit()) {
+                char ch = _getch();
+                if (ch == 'a') {
+                    printf("Salida detectada\n");
+                    return; // Salir si se presiona 'a'
+                }
+                if (ch == 'u') {
+                    if (tiempo > 500) tiempo -= 500; // Aumenta la velocidad (disminuye el tiempo)
+                }
+                if (ch == 'd') {
+                    tiempo += 500; // Disminuye la velocidad (aumenta el tiempo)
+                }
+            }
+
+            disp_binary(output, 1); 
+            delay(tiempo); 
+            output = output << 1; // Desplaza a la Izquierda
+        }
+    } while (1);
+}
+
+void choque() {
+    int tiempo = 2000; // Tiempo inicial
+
+    printf("Estas viendo el Choque!\n");
+    printf("Presione la tecla 'a' si quiere salir!\n");
+    printf("Presione la tecla 'u' para aumentar la velocidad!\n");
+    printf("Presione la tecla 'd' para disminuir la velocidad!\n");
+
+    while (1) {
+        for (int i = 0; i < 8; i++) {
+            if (_kbhit()) {
+                char ch = _getch();
+                if (ch == 'a') {
+                    printf("Salida detectada\n");
+                    return; 
+                }
+                if (ch == 'u') {
+                    if (tiempo > 500) tiempo -= 500; // Aumenta la velocidad (disminuye el tiempo)
+                }
+                if (ch == 'd') {
+                    tiempo += 500; // Disminuye la velocidad (aumenta el tiempo) 
+                }
+            }
+
+            disp_binary(TablaCh[i], 2);
+            delay(tiempo); 
+            }
+}
 }
