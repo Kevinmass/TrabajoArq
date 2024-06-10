@@ -176,3 +176,36 @@ void choque() {
             }
 }
 }
+
+void ambulancia(){
+ int tiempo = 2000; // Tiempo inicial
+
+    printf("Estas viendo el Choque!\n");
+    printf("Presione la tecla 'a' si quiere salir!\n");
+    printf("Presione la tecla 'u' para aumentar la velocidad!\n");
+    printf("Presione la tecla 'd' para disminuir la velocidad!\n");
+
+    while (1) {
+        for (int i = 0; i < 8; i++) {
+            if (_kbhit()) {
+                char ch = _getch();
+                if (ch == 'a') {
+                    printf("Salida detectada\n");
+                    return; 
+                }
+                if (ch == 'u') {
+                    if (tiempo > 500) tiempo -= 500; // Aumenta la velocidad (disminuye el tiempo)
+                }
+                if (ch == 'd') {
+                    tiempo += 500; // Disminuye la velocidad (aumenta el tiempo) 
+                }
+            }
+
+            disp_binary(TablaCh[i], 2);
+            delay(tiempo); 
+            }
+}
+}
+void rebote(){
+
+}
