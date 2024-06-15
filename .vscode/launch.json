@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/Kevin/Documents/Prog/Assembly/TrabajoArq",
-      "program": "c:/Users/Kevin/Documents/Prog/Assembly/TrabajoArq/build/Debug/outDebug",
+      "cwd": "c:/Users/Kevin/Documents/Prog/Assembly/TrabajoArq/PROYECTO",
+      "program": "c:/Users/Kevin/Documents/Prog/Assembly/TrabajoArq/PROYECTO/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
