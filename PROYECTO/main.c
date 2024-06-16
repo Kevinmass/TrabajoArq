@@ -1,90 +1,107 @@
-#include <easyPIO.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
+#include <conio.h>
+#include "EasyPIO.h"
 
-// Prototipos de funciones
-void auto_fantastico();
-void choque();
-void ambulancia();
-int password();
-int kbhit();
 
-int main(void) {
-    int option;
-    int ctr;
-    
-    pioInit();
-    pinMode(21, OUTPUT);
-    
-    for (int i = 0; i < 10; i++) {
-        digitalWrite(21, 1);
-        delayMillis(500); // 500 ms
-        digitalWrite(21, 0);
-        delayMillis(500); // 500 ms
-    }
 
-    for (int i = 0; i < 3; i++) {
-        ctr = password();
-        if (ctr == 1) break;
-    }
+// Definir los pines GPIO utilizados
+#define LED1 17
+#define LED2 18
+#define LED3 27
+#define LED4 22
 
-    if (ctr != 1) {
+
+// Prototipos de las funciones
+void common_sequence_1();
+void common_sequence_2();
+void custom_sequence_algorithm();
+void custom_sequence_table();
+
+void contrasena();
+void menu();
+void secuencia(int choice);
+
+int main() {
+    int aux = 0;
+    pioInit();  // Inicializar EasyPIO
+    aux = contrasena();
+    if (aux == 0)
+    {
         return 0;
     }
+    
+    int choice;
 
+    while(1) {
+        menu();
+        printf("Seleccione una secuencia de luces: ");
+        scanf("%d", &choice);
+        
+        if (choice == 5) {
+            printf("Saliendo del programa.\n");
+            break;
+        }
+        
+        secuencia(choice);
+    }
+
+    return 0;
+}
+
+void menu() {
+    printf("Menu de Secuencias de Luces:\n");
+    printf("1. Secuencia Comun 1 (common_sequence_1)\n");
+    printf("2. Secuencia Comun 2 (common_sequence_2)\n");
+    printf("3. Secuencia Personalizada Algoritmo (custom_sequence_algorithm)\n");
+    printf("4. Secuencia Personalizada Tabla (custom_sequence_table)\n");
+    printf("5. Salir\n");
+}
+
+void contrasena() {
+    char contra[20];
+    char correct_contra[] = "1234"; // Contraseña predefinida
+    int cont = 1;
     while (1) {
-        printf("Menu:\n");
-        printf("1. Auto Fantastico\n");
-        printf("2. Choque\n");
-        printf("3. Ambulancia\n");
-        printf("4. Salir\n");
-        printf("Ingrese su elección: ");
-        scanf("%d", &option);
+        printf("Intento Nro: %d\n", cont);
+        printf("Ingrese la contraseña: ");
+        scanf("%s", contra);
 
-        switch (option) {
-            case 1:
-                auto_fantastico();
-                break;
-            case 2:
-                choque();
-                break;
-            case 3:
-                ambulancia();
-                break;
-            case 4:
-                printf("Saliendo...\n");
-                return 0;
-            default:
-                printf("Opción no válida.\n");
-                break;
+        if (strcmp(contra, correct_contra) == 0) {
+            printf("Acceso concedido.\n");
+            return 1;
+        } else {
+            printf("Contraseña incorrecta. Intente de nuevo.\n");
+        }
+        cont++;
+        if (cont > 3) {
+            printf("Demasiados intentos fallidos.\n");
+            return 0;
         }
     }
 }
 
-int password() {
-    int ctr = 0;
-    char pass[5]; // Agrega espacio para el terminador nulo
-    char pass2[5] = "1234";
-
-    printf("Ingrese la contraseña: ");
-    for (int i = 0; i < 4; i++) {
-        pass[i] = getchar();
-        printf("*");
-    }
-    pass[4] = '\0'; // Asegúrate de que la cadena esté terminada en nulo
-
-    printf("\n");
-
-    if (strcmp(pass, pass2) == 0) {
-        printf("Contraseña correcta.\n");
-        return 1;
-    } else {
-        printf("Contraseña incorrecta.\n");
-        return 0;
+void secuencia(int choice) {
+    switch (choice) {
+        case 1:
+           auto_fantastico();
+            break;
+        case 2:
+            choque();
+            break;
+        case 3:
+            ambulancia();
+            break;
+        case 4:
+            custom_sequence_table();
+            break;
+        default:
+            printf("Opción inválida.\n");
     }
 }
+
+
 
 void auto_fantastico() {
     unsigned char output;
@@ -155,13 +172,22 @@ void ambulancia() {
     }
 }
 
-int kbhit() {
-    struct timeval tv;
-    fd_set fds;
-    tv.tv_sec = 0;
-    tv.tv_usec = 0;
-    FD_ZERO(&fds);
-    FD_SET(STDIN_FILENO, &fds);
-    select(STDIN_FILENO + 1, &fds, NULL, NULL, &tv);
-    return FD_ISSET(STDIN_FILENO, &fds);
+void custom_sequence_table() {
+    printf("Ejecutando Secuencia Personalizada Tabla\n");
+    // Configurar pines como salida
+    pioInit();
+    pinMode(LED1, OUTPUT);
+    pinMode(LED2, OUTPUT);
+    pinMode(LED3, OUTPUT);
+    pinMode(LED4, OUTPUT);
+
+    // Secuencia personalizada por tabla
+    int sequence[] = {LED1, LED2, LED3, LED4};
+    int size = sizeof(sequence) / sizeof(sequence[0]);
+
+    for(int i = 0; i < size; i++) {
+        digitalWrite(sequence[i], 1);
+        delayMillis(500);
+        digitalWrite(sequence[i], 0);
+    }
 }
