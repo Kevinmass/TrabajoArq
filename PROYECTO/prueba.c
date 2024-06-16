@@ -2,36 +2,46 @@
 #include <conio.h>
 #include <windows.h>
 
-int main(){
-    int a= 0;
+int main()
+{ 
+    int key;
+    int a = 0;
     do
-{
-    Sleep(500); // Espera unidades de tiempo
-    printf("\e[1;1H\e[2J"); // Limpia la pantalla
-    if (a == 0)
     {
-         printf("a");
+        Sleep(500);             // Espera unidades de tiempo
+        printf("\e[1;1H\e[2J"); // Limpia la pantalla
+        if (a == 0)
+        {
+            printf("a");
+        }
+        else
+            printf("b");
 
-    }else printf("b");
-       
-            if (_kbhit()) { // Si se presiona una tecla
-                char ch = _getch(); // Guarda la tecla presionada
-                if (ch == 'a') {
-                    printf("Salida detectada\n");
-                    return 0; // Salir si se presiona 'a'
-                }
-                if (ch == 's')
-                {
-                    a= 0;
-                }
-                if (ch == 'd')
-                {
-                    a= 1;
-                }
-                
+        if (_kbhit())
+        {                     
+        key=getch();
+        if (key == 224) {
+            do {
+                key=getch();
+            } while(key==224);
+            
+            switch (key) {
+                case 72:
+                    printf("up");
+                    break;
+                case 75:
+                    printf("left");
+                    break;
+                case 77:
+                    printf("right");
+                    break;
+                case 80:
+                    printf("down");
+                    break;
             }
         
-} while (1);
-
-    
-}
+            }
+        }
+    } while (1);
+    return 0;
+    }
