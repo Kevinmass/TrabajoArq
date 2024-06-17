@@ -20,29 +20,24 @@
     .extern printString
     .extern refreshScreen
 
-    .equ OUTPUT, 1
+    .equ OUTPUT, 1 
     .equ LED_PIN, 21
-    
-    
-    
-
-
     .equ KEY_LEFT, 68
     .equ KEY_RIGHT, 67
 
 auto_fantastico_asm:
 
     @ Inicialización de la interfaz
-    bl pioInit
-    ldr r0, =LED_PIN
-    mov r1, #OUTPUT
+    bl pioInit 
+    ldr r0, =LED_PIN 
+    mov r1, #OUTPUT 
     bl pinMode
 
     mov r3, #2000  @ Tiempo inicial
     mov r4, #0     @ Variable de tecla
 
     mov r0, #0     @ Limpiar la pantalla
-    bl clearScreen
+    bl clearScreen 
 
     @ Imprimir mensajes
     ldr r0, =msg_auto_fantastico
@@ -62,7 +57,7 @@ outer_loop:
     @ Manejo de entrada del teclado
     bl kbhit
     cmp r0, #0     @ Verificar si hay una tecla presionada
-    beq no_key_press
+    beq no_key_press 
 
     bl getch       @ Obtener la tecla presionada
     mov r4, r0     @ Almacenar la tecla en r4
