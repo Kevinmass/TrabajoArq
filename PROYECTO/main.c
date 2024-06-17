@@ -10,7 +10,6 @@
 // Definir los pines GPIO utilizados
 const char led[] = {14, 15, 18, 23, 24, 25, 8, 7}; // Variable Global
 unsigned char TablaCh[] = {0x81, 0x42, 0x24, 0x18, 0x18, 0x24, 0x42, 0x81};
-
 int leds(int num);
 void Disp_Binary(int);
 
@@ -32,6 +31,22 @@ void disp_binary(int i, int option) {
     refresh();
 }
 
+int kbhit(void)
+{
+
+    int ch = getch();
+
+    if (ch != ERR)
+    {
+
+        ungetch(ch); // Vuelve a poner el carácter en la cola de entrada
+
+        return 1;
+    }
+
+    return 0;
+}
+
 int leds(int num) {
     int i, numval;
     for (i = 0; i < 8; i++) {
@@ -42,10 +57,10 @@ int leds(int num) {
 }
 
 // Prototipos de las funciones
-void common_sequence_1();
-void common_sequence_2();
-void custom_sequence_algorithm();
-void custom_sequence_table();
+void auto_fantastico();
+void choque();
+void ambulancia();
+void Juego();
 
 void contrasena();
 void menu();
@@ -60,9 +75,12 @@ int main() {
     }
     leds(0xFF);
 
-    initscr(); //ni idea que hace esto, averiguar si es de ncurses
+    initscr(); //Inicializa ncurses
     cbreak();
     noecho();
+    keypad(stdscr, TRUE);
+    nodelay(stdscr, TRUE);
+    curs_set(FALSE);
 
     aux = contrasena();
     if (aux == 0)
@@ -74,11 +92,11 @@ int main() {
 
     while(1) {
         menu();
-        printf("Seleccione una secuencia de luces: ");
+        printw("Seleccione una secuencia de luces: ");
         scanf("%d", &choice);
         
         if (choice == 5) {
-            printf("Saliendo del programa.\n");
+            printw("Saliendo del programa.\n");
             break;
         }
         
@@ -90,12 +108,12 @@ int main() {
 
 void menu() {
     clear(); 
-    printf("Menu de Secuencias de Luces:\n");
-    printf("1. auto fantastico \n");
-    printf("2. choque \n");
-    printf("3. ambulancia \n");
-    printf("4. otra\n");
-    printf("5. Salir\n");
+    printw("Menu de Secuencias de Luces:\n");
+    printw("1. auto fantastico \n");
+    printw("2. choque \n");
+    printw("3. ambulancia \n");
+    printw("4. otra\n");
+    printw("5. Salir\n");
 }
 
 void contrasena() {
@@ -103,19 +121,19 @@ void contrasena() {
     char correct_contra[] = "1234"; // Contraseña predefinida
     int cont = 1;
     while (1) {
-        printf("Intento Nro: %d\n", cont);
-        printf("Ingrese la contraseña: ");
+        printw("Intento Nro: %d\n", cont);
+        printw("Ingrese la contraseña: ");
         scanf("%s", contra);
 
         if (strcmp(contra, correct_contra) == 0) {
-            printf("Acceso concedido.\n");
+            printw("Acceso concedido.\n");
             return 1;
         } else {
-            printf("Contraseña incorrecta. Intente de nuevo.\n");
+            printw("Contraseña incorrecta. Intente de nuevo.\n");
         }
         cont++;
         if (cont > 3) {
-            printf("Demasiados intentos fallidos.\n");
+            printw("Demasiados intentos fallidos.\n");
             return 0;
         }
     }
@@ -133,10 +151,10 @@ void secuencia(int choice) {
             ambulancia();
             break;
         case 4:
-            custom_sequence_table();
+            Juego();
             break;
         default:
-            printf("Opción inválida.\n");
+            printw("Opción inválida.\n");
     }
 }
 
@@ -146,16 +164,27 @@ void auto_fantastico() {
     unsigned char output;
     int key;
     int tiempo = 2000; // Tiempo inicial
+
+    initscr();
+    cbreak();
+    noecho();
+    keypad(stdscr, TRUE);
+    nodelay(stdscr, TRUE);
+    curs_set(FALSE);
+
+     pioInit();
+    pinMode(21, OUTPUT);
+
     clear(); 
-    printf("Estás viendo el Auto Fantástico!\n");
-    printf("Presiona flechita izquierda para salir!\n");
-    printf("Presiona flechita arriba para aumentar la velocidad!\n");
-    printf("Presiona flechita abajo para disminuir la velocidad!\n");
+    printw("Estás viendo el Auto Fantástico!\n");
+    printw("Presiona flechita izquierda para salir!\n");
+    printw("Presiona flechita arriba para aumentar la velocidad!\n");
+    printw("Presiona flechita abajo para disminuir la velocidad!\n");
 
     do {
         output = 0x80; 
         for (int k = 0; k < 8; k++) {
-            if (_kbhit())
+            if (kbhit())
                 {                     
                 key=getch();
                 if (key == 224) {
@@ -187,7 +216,7 @@ void auto_fantastico() {
          output = 0x01; 
         for (int k = 0; k < 6; k++)
         {
-            if (_kbhit())
+            if (kbhit())
                 {                     
                 key=getch();
                 if (key == 224) {
@@ -220,17 +249,28 @@ void auto_fantastico() {
 }
 
 void choque() {
+
+    initscr();
+    cbreak();
+    noecho();
+    keypad(stdscr, TRUE);
+    nodelay(stdscr, TRUE);
+    curs_set(FALSE);
+
+     pioInit();
+    pinMode(21, OUTPUT);
+
     clear(); 
     int tiempo = 2000;
     int key;
-    printf("Estás viendo el Choque!\n");
-    printf("Presiona flechita izquierda para salir!\n");
-    printf("Presiona flechita arriba para aumentar la velocidad!\n");
-    printf("Presiona flechita abajo para disminuir la velocidad!\n");
+    printw("Estás viendo el Choque!\n");
+    printw("Presiona flechita izquierda para salir!\n");
+    printw("Presiona flechita arriba para aumentar la velocidad!\n");
+    printw("Presiona flechita abajo para disminuir la velocidad!\n");
 
     while (1) {
         for (int k = 0; k < 8; k++) {
-            if (_kbhit())
+            if (kbhit())
                 {                     
                 key=getch();
                 if (key == 224) {
@@ -254,131 +294,171 @@ void choque() {
                         }
                     }
                 }
-            disp_binary(TablaCh[i], 2);
+            disp_binary(TablaCh[k], 2);
             delayMillis(tiempo); // Usar delayMillis en lugar de usleep
         }
     }
 }
 
 void ambulancia() {
+    unsigned char output;
+
+    initscr();
+    cbreak();
+    noecho();
+    keypad(stdscr, TRUE);
+    nodelay(stdscr, TRUE);
+    curs_set(FALSE);
+
+    pioInit();
+    pinMode(21, OUTPUT);
+
     clear(); 
     int tiempo = 2000;
     int key;
 
-    printf("Estás viendo la Ambulancia!\n");
-    printf("Presiona flechita izquierda para salir!\n");
-    printf("Presiona flechita arriba para aumentar la velocidad!\n");
-    printf("Presiona flechita abajo para disminuir la velocidad!\n");
-    do {
-    for (int j = 0; j < 2; j++)
-    {
-       output = 0x80; 
-        for (int k = 0; k < 8; k++) {
-            if (_kbhit())
-                {                     
-                key=getch();
-                if (key == 224) {
-                        do {
-                            key=getch();
-                        } while(key==224);
-                        
-                        switch (key) {
-                            case 72:
-                                tiempo += 500;
-                                break;
-                            case 75:
-                                return; //flecha izquierda
-                                break;
-                            case 80:
-                            if (tiempo > 500)
-                            {
-                                tiempo -= 500;
-                            }
-                                break;         
-                        }
-                    }
-                }
+    printw("Estás viendo la Ambulancia!\n");
+    printw("Presiona flechita izquierda para salir!\n");
+    printw("Presiona flechita arriba para aumentar la velocidad!\n");
+    printw("Presiona flechita abajo para disminuir la velocidad!\n");
+    refresh();
 
-            digitalWrite(21, (output & 0x01) != 0);
-            delayMillis(tiempo); 
-            output >> 1; // Desplaza a la derecha
-        }
-         output = 0x01; 
-        for (int k = 0; k < 6; k++)
-        {
-            if (_kbhit())
-                {                     
-                key=getch();
-                if (key == 224) {
-                        do {
-                            key=getch();
-                        } while(key==224);
-                        
+    do {
+        for (int j = 0; j < 2; j++) {
+            output = 0x80;
+            for (int k = 0; k < 8; k++) {
+                if (kbhit()) {
+                    key = getch();
+                    if (key == 27) { // Detectar flechas
+                        key = getch();
+                        key = getch();
                         switch (key) {
-                            case 72:
+                            case 65: // Flecha arriba
+                                tiempo -= 500;
+                                break;
+                            case 66: // Flecha abajo
                                 tiempo += 500;
                                 break;
-                            case 75:
-                                return; //flecha izquierda
-                                break;
-                            case 80:
-                            if (tiempo > 500)
-                            {
-                                tiempo -= 500;
-                            }
-                                break;         
+                            case 68: // Flecha izquierda
+                                endwin();
+                                return;
                         }
                     }
                 }
-            digitalWrite(21, (output & 0x01) != 0);
-            delayMillis(tiempo); 
-            output << 1; // Desplaza a la izquierda
-        } 
-        //parpadeo de las luces x2
-        for (int j = 0; j < 2; j++)
-        {
-            output = 0x80; 
-        for (int k = 0; k < 8; k++)
-        {
-            digitalWrite(21, (output & 0x01) != 0);
-            output >> 1; 
+                digitalWrite(21, (output & 0x80) != 0);
+                usleep(tiempo * 1000);
+                output >>= 1; // Desplaza a la derecha
+            }
+            output = 0x01;
+            for (int k = 0; k < 6; k++) {
+                if (kbhit()) {
+                    key = getch();
+                    if (key == 27) { // Detectar flechas
+                        key = getch();
+                        key = getch();
+                        switch (key) {
+                            case 65: // Flecha arriba
+                                tiempo -= 500;
+                                break;
+                            case 66: // Flecha abajo
+                                tiempo += 500;
+                                break;
+                            case 68: // Flecha izquierda
+                                endwin();
+                                return;
+                        }
+                    }
+                }
+                digitalWrite(21, (output & 0x01) != 0);
+                usleep(tiempo * 1000);
+                output <<= 1; // Desplaza a la izquierda
+            }
+            // Parpadeo de las luces x2
+            for (int j = 0; j < 2; j++) {
+                parpadeo()
+            }
         }
-            delayMillis(tiempo); 
-            output = 0x01; 
-        for (int k = 0; k < 6; k++)
-        {
-            digitalWrite(21, (output & 0x01) != 0);
-            output << 1; 
-        }
-            delayMillis(tiempo); 
-        }
-        
-        
-    }
-    
-        
-        
     } while (1);
 }
 
-void custom_sequence_table() { //no hace nada esta de standby
-clear(); 
-    printf("Ejecutando Secuencia Personalizada Tabla\n");
-    // Configurar pines como salida
-    pioInit();
-    pinMode(LED1, OUTPUT);
-    pinMode(LED2, OUTPUT);
-    pinMode(LED3, OUTPUT);
-    pinMode(LED4, OUTPUT);
+void show_pattern(unsigned char pattern) {
+    disp_binary(pattern, 0xFF); // Mostrar el patrón en los LEDs
+}
 
-    // Secuencia personalizada por tabla
-    int sequence[] = {LED1, LED2, LED3, LED4};
-    int size = sizeof(sequence) / sizeof(sequence[0]);
+// Función para generar un patrón aleatorio en un extremo de los LEDs
+unsigned char generate_pattern() {
+    return (rand() % 2 == 0) ? 0x80 : 0x01; // Generar aleatoriamente en el extremo izquierdo (0x80) o derecho (0x01)
+}
 
-    for(int i = 0; i < size; i++) {
-        digitalWrite(sequence[i], 1);
-        delayMillis(500);
-        digitalWrite(sequence[i], 0);
+// Función para parpadear todos los LEDs una vez
+void parpadeo() {
+    disp_binary(0xFF, 0x00); // Apagar todos los LEDs
+    delayMillis(500);
+    disp_binary(0x00, 0xFF); // Encender todos los LEDs
+    delayMillis(500);
+    disp_binary(0xFF, 0x00); // Apagar todos los LEDs
+}
+
+// Función principal del juego
+void Juego() {
+    int key;
+    int tiempo = 3000; // Tiempo inicial entre patrones (en milisegundos)
+    unsigned char pattern;
+    int correct_answer;
+    
+    printw("Presiona 's' para salir.\n");
+    printw("Presiona flechita arriba para aumentar la velocidad.\n");
+    printw("Presiona flechita abajo para disminuir la velocidad.\n");
+    refresh();
+
+    while (1) {
+        pattern = generate_pattern(); // Generar patrón aleatorio
+        show_pattern(pattern); // Mostrar el patrón en los LEDs
+
+        correct_answer = (pattern == 0x80) ? KEY_LEFT : KEY_RIGHT; // Determinar la respuesta correcta
+
+        // Esperar la respuesta del usuario
+        int timer = 0;
+        while (timer < 3000) {
+            if (kbhit()) {
+                key = getch();
+                if (key == 27) { // Detectar flechas
+                    key = getch();
+                    switch (key) {
+                        case 65: // Flecha arriba
+                            tiempo -= 500;
+                            break;
+                        case 66: // Flecha abajo
+                            tiempo += 500;
+                            break;
+                        case 67: // Flecha derecha
+                            if (key == correct_answer) {
+                            parpadeo(); // Parpadear LEDs una vez si la respuesta es correcta
+                           }
+                        break;
+                        case 68: // Flecha izquierda
+                            if (key == correct_answer) {
+                            parpadeo(); // Parpadear LEDs una vez si la respuesta es correcta
+                            }
+                        break;
+                    }
+                } else if (key == 's' || key == 'S') { // Salir del juego con 's' o 'S'
+                    endwin();
+                    return;
+                }
+            }
+            delayMillis(100); // Esperar 100 milisegundos
+            timer += 100;
+        }
+
+        if (timer >= 3000) {
+            // Se acabó el tiempo, parpadear LEDs tres veces
+            for (int i = 0; i < 3; ++i) {
+                parpadeo();
+            }
+        }
+
+        delayMillis(tiempo); // Esperar antes de mostrar el siguiente patrón
     }
 }
 
