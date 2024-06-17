@@ -13,6 +13,11 @@ unsigned char TablaCh[] = {0x81, 0x42, 0x24, 0x18, 0x18, 0x24, 0x42, 0x81};
 int leds(int num);
 void Disp_Binary(int);
 
+// Funciones en Assembly
+extern void auto_fantastico_asm();
+extern void choque_asm();
+extern void ambulancia_asm();
+extern void Juego_asm();
 
 int tiempo_global = 2000; // Tiempo global
 
@@ -161,6 +166,21 @@ void secuencia(int choice) {
 
 
 void auto_fantastico() {
+    do
+    {
+    printw("Quieres la version de C o de Assembly?\n");
+    printw("1. C\n");
+    printw("2. Assembly\n");
+    int choice;
+    scanf("%d", &choice);
+    if (choice == 2) {
+        auto_fantastico_asm();
+        return;
+    } else {
+        printw("Opción inválida.\n");
+    }   
+    } while (1);
+    
     unsigned char output;
     int key;
     int tiempo = 2000; // Tiempo inicial
@@ -174,7 +194,6 @@ void auto_fantastico() {
 
      pioInit();
     pinMode(21, OUTPUT);
-
     clear(); 
     printw("Estás viendo el Auto Fantástico!\n");
     printw("Presiona flechita izquierda para salir!\n");
@@ -249,6 +268,20 @@ void auto_fantastico() {
 }
 
 void choque() {
+    do
+    {
+    printw("Quieres la version de C o de Assembly?\n");
+    printw("1. C\n");
+    printw("2. Assembly\n");
+    int choice;
+    scanf("%d", &choice);
+    if (choice == 2) {
+        choque_asm();
+        return;
+    } else {
+        printw("Opción inválida.\n");
+    }   
+    } while (1);
 
     initscr();
     cbreak();
@@ -301,6 +334,21 @@ void choque() {
 }
 
 void ambulancia() {
+    do
+    {
+    printw("Quieres la version de C o de Assembly?\n");
+    printw("1. C\n");
+    printw("2. Assembly\n");
+    int choice;
+    scanf("%d", &choice);
+    if (choice == 2) {
+        ambulancia_asm();
+        return;
+    } else {
+        printw("Opción inválida.\n");
+    }   
+    } while (1);
+
     unsigned char output;
 
     initscr();
@@ -401,6 +449,21 @@ void parpadeo() {
 
 // Función principal del juego
 void Juego() {
+    do
+    {
+    printw("Quieres la version de C o de Assembly?\n");
+    printw("1. C\n");
+    printw("2. Assembly\n");
+    int choice;
+    scanf("%d", &choice);
+    if (choice == 2) {
+        Juego_asm();
+        return;
+    } else {
+        printw("Opción inválida.\n");
+    }   
+    } while (1);
+
     int key;
     int tiempo = 3000; // Tiempo inicial entre patrones (en milisegundos)
     unsigned char pattern;
