@@ -1,8 +1,3 @@
-.global auto_fantastico_asm
-.global choque_asm
-.global ambulancia_asm
-.global Juego_asm
-
 .extern pioInit
 .extern pinMode
 .extern digitalWrite
@@ -36,7 +31,10 @@ msg_ambulancia: .asciz "Estás viendo la Ambulancia!\n"
 output_left_pattern: .byte 0x80, 0xC0, 0xE0, 0xF0, 0xF0, 0xE0, 0xC0, 0x80
 output_right_pattern: .byte 0x01, 0x03, 0x07, 0x0F, 0x0F, 0x07, 0x03, 0x01
 
+.global auto_fantastico_asm
+
 .text
+
 .auto_fantastico_asm:
     bl pioInit
     ldr r0, =LED_PIN
@@ -129,6 +127,10 @@ output_right_pattern: .byte 0x01, 0x03, 0x07, 0x0F, 0x0F, 0x07, 0x03, 0x01
     sub r3, r3, #500
     b .loop
 
+
+
+.global choque_asm
+
 .choque_asm:
     bl pioInit
     ldr r0, =LED_PIN
@@ -192,6 +194,10 @@ output_right_pattern: .byte 0x01, 0x03, 0x07, 0x0F, 0x0F, 0x07, 0x03, 0x01
     blt .loop
     sub r3, r3, #500
     b .loop
+
+
+
+.global ambulancia_asm
 
 .ambulancia_asm:
     bl pioInit
@@ -275,6 +281,11 @@ output_right_pattern: .byte 0x01, 0x03, 0x07, 0x0F, 0x0F, 0x07, 0x03, 0x01
     mov r2, #8
     bl disp_binary
     bx lr
+
+
+
+
+.global Juego_asm
 
 .Juego_asm:
     bl pioInit
