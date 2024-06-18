@@ -67,16 +67,18 @@ void choque();
 void ambulancia();
 void Juego();
 
-void contrasena();
+int contrasena();
 void menu();
 void secuencia(int choice);
+void parpadeo();
+void mostrar_patron(unsigned char pattern);
 
 int main() {
     int aux = 0;
     pioInit();  // Inicializar EasyPIO
 
     for (int k = 0; k < 8; k++) {
-        pinMode(led[i], OUTPUT); // Configuro los 8 pines para los Leds como salidas en main
+        pinMode(led[k], OUTPUT); // Configuro los 8 pines para los Leds como salidas en main
     }
     leds(0xFF);
 
@@ -121,7 +123,7 @@ void menu() {
     printw("5. Salir\n");
 }
 
-void contrasena() {
+int contrasena() {
     char contra[20];
     char correct_contra[] = "1234"; // Contraseña predefinida
     int cont = 1;
@@ -423,13 +425,13 @@ void ambulancia() {
             }
             // Parpadeo de las luces x2
             for (int j = 0; j < 2; j++) {
-                parpadeo()
+                parpadeo();
             }
         }
     } while (1);
 }
 
-void show_pattern(unsigned char pattern) {
+void mostrar_patron(unsigned char pattern) {
     disp_binary(pattern, 0xFF); // Mostrar el patrón en los LEDs
 }
 
@@ -476,7 +478,7 @@ void Juego() {
 
     while (1) {
         pattern = generate_pattern(); // Generar patrón aleatorio
-        show_pattern(pattern); // Mostrar el patrón en los LEDs
+        mostrar_patron(pattern); // Mostrar el patrón en los LEDs
 
         correct_answer = (pattern == 0x80) ? KEY_LEFT : KEY_RIGHT; // Determinar la respuesta correcta
 
