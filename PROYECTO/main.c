@@ -11,7 +11,7 @@
 const char led[] = {14, 15, 18, 23, 24, 25, 8, 7}; // Variable Global
 unsigned char TablaCh[] = {0x81, 0x42, 0x24, 0x18, 0x18, 0x24, 0x42, 0x81};
 int leds(int num);
-void Disp_Binary(int);
+void display_Binary(int,int);
 
 
 // Prototipos de las funciones
@@ -29,7 +29,7 @@ void mostrar_patron(unsigned char pattern);
 int tiempo_global = 2000; // Tiempo global
 
 
-void disp_binary(int i, int option) {
+void display_binary(int i, int option) {
     leds(i); // Actualiza los LEDs
     move(0, 0); // Mueve el cursor al inicio de la pantalla
     for (int t = 128; t > 0; t = t / 2) {
@@ -66,6 +66,27 @@ int leds(int num) {
         digitalWrite(led[i], numval);
     }
     return 0;
+}
+void apagar_led(int pin) {
+    // Apagar un LED
+    digitalWrite(pines[pin-1], LOW); // Ajuste para índice correcto
+}
+void prenderTodos() {
+    // Encender todos los LEDs
+    int num_pines = sizeof(pines) / sizeof(pines[0]);
+
+    for (int i = 0; i < num_pines; i++) {
+        digitalWrite(pines[i], HIGH);
+    }
+}
+
+void apagarTodos() {
+    // Apagar todos los LEDs
+    int num_pines = sizeof(pines) / sizeof(pines[0]);
+
+    for (int i = 0; i < num_pines; i++) {
+        digitalWrite(pines[i], LOW);
+    }
 }
 
 
